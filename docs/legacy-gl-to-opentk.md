@@ -74,6 +74,15 @@ that mattered here:
 - **Normalisation.** The hand-tessellated teapot is scaled at draw time, so its
   normals are re-normalised with `GL_NORMALIZE` to keep the lighting correct —
   GLUT used to hand you unit-length normals for free.
+- **Animation frame rate.** This one is easy to miss. The exercises advance their
+  rotation by a *fixed amount per frame* (`angle += 2.5f`, `degRot++`), which
+  implicitly assumed the throttled redraw rate of GL4Java's `GLAnimCanvas`.
+  OpenTK's `GameWindow` runs the loop **uncapped** by default, so on a modern GPU
+  it renders hundreds of frames a second and every scene spins many times too
+  fast. The base window therefore caps the loop with `UpdateFrequency = 60`
+  (`Core/ExerciseWindow.cs`). The robust alternative is time-based animation
+  (scale increments by frame delta), but a fixed cap reproduces the original feel
+  with no change to the per-frame exercise code.
 
 ## What had to be re-implemented (GLUT / GLU had no OpenTK equivalent)
 

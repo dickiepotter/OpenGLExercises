@@ -26,6 +26,15 @@ public abstract class ExerciseWindow : GameWindow
     /// <summary>Degrees added to <see cref="Angle"/> per frame by <see cref="Rotate"/>.</summary>
     protected float AngleStep = 1.0f;
 
+    /// <summary>
+    /// Frame-rate cap for the animation loop. The exercises advance their
+    /// rotation by a fixed amount *per frame* (e.g. <c>Angle += AngleStep</c>),
+    /// which assumed the throttled redraw rate of GL4Java's <c>GLAnimCanvas</c>.
+    /// OpenTK's <c>GameWindow</c> is uncapped by default, so without this the
+    /// scenes spin many times too fast. 60 fps gives the intended speed.
+    /// </summary>
+    private const double TargetFps = 60.0;
+
     private readonly string? _capturePath;
     private readonly int _captureAfterFrames;
     private int _frame;
@@ -35,8 +44,9 @@ public abstract class ExerciseWindow : GameWindow
     {
         _capturePath = CaptureRequest.Path;
         _captureAfterFrames = CaptureRequest.AfterFrames;
-        if (_capturePath != null)
-            UpdateFrequency = 0; // run as fast as possible when capturing headlessly
+        // Cap the loop so per-frame animation runs at a sane speed; when capturing
+        // headlessly we instead run flat-out to reach the target frame quickly.
+        UpdateFrequency = _capturePath != null ? 0 : TargetFps;
     }
 
     private static NativeWindowSettings MakeSettings(string title, int width, int height) => new()
