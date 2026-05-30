@@ -18,6 +18,10 @@ public static class Texture
         var name = asm.GetManifestResourceNames()
             .First(n => n.EndsWith(resourceSuffix, StringComparison.OrdinalIgnoreCase));
         using var stream = asm.GetManifestResourceStream(name)!;
+        // PNG rows run top-to-bottom, but glTexImage2D treats the first row as the
+        // bottom of the texture. Flip on load so the image is the right way up for
+        // the exercise's texture coordinates (otherwise the monkey is upside down).
+        StbImage.stbi_set_flip_vertically_on_load(1);
         var image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
 
         int tex = GL.GenTexture();
