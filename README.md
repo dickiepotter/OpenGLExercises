@@ -121,3 +121,9 @@ UID*. Ported to C# / OpenTK while preserving the original behaviour.
 
 The teapot control points (`Core/Data/teapotrim.bpt`) are Martin Newell's classic
 Utah teapot dataset.
+
+## Licence and disclaimer
+
+This is a personal project by Richard Potter, shared in the hope it's useful. It's free to use under the MIT licence (see [LICENSE](LICENSE)). It's provided as is: I make no promises that it works or suits your purpose, and I take no responsibility for anything that happens from using it. It isn't a product of, or supported by, any company I work for.
+
+The Utah teapot control points (`Core/Data/teapotrim.bpt`) are Martin Newell's classic dataset and aren't covered by this licence.
